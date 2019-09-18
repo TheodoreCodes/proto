@@ -3,22 +3,15 @@ syntax = "proto3";
 package proto;
 
 service AuthService {
-    rpc Login(Credentials) returns (TokenResponse);
-    rpc Create(Credentials) returns (TokenResponse);
+    rpc Login (CredentialsMessage) returns (TokenResponse);
+    rpc Create (CredentialsMessage) returns (TokenResponse);
 }
 
-message Credentials {
+message CredentialsMessage {
     string email = 1;
     string password = 2;
 }
 
 message TokenResponse {
-//    message TokenError {
-//        int32 statusCode = 1;
-//        string errorMessage = 2;
-//    }
-
     string Token  = 1;
-//    TokenError error = 2;
-
 }
