@@ -118,18 +118,19 @@ func init() {
 func init() { proto.RegisterFile("auth.proto", fileDescriptor_8bbd6f3875b0e874) }
 
 var fileDescriptor_8bbd6f3875b0e874 = []byte{
-	// 176 bytes of a gzipped FileDescriptorProto
+	// 178 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x4a, 0x2c, 0x2d, 0xc9,
 	0xd0, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x05, 0x53, 0x4a, 0x6e, 0x5c, 0x42, 0xce, 0x45,
 	0xa9, 0x29, 0xa9, 0x79, 0x25, 0x99, 0x89, 0x39, 0xc5, 0xbe, 0xa9, 0xc5, 0xc5, 0x89, 0xe9, 0xa9,
 	0x42, 0x22, 0x5c, 0xac, 0xa9, 0xb9, 0x89, 0x99, 0x39, 0x12, 0x8c, 0x0a, 0x8c, 0x1a, 0x9c, 0x41,
 	0x10, 0x8e, 0x90, 0x14, 0x17, 0x47, 0x41, 0x62, 0x71, 0x71, 0x79, 0x7e, 0x51, 0x8a, 0x04, 0x13,
 	0x58, 0x02, 0xce, 0x57, 0x52, 0xe5, 0xe2, 0x0d, 0xc9, 0xcf, 0x4e, 0xcd, 0x0b, 0x4a, 0x2d, 0x2e,
-	0xc8, 0xcf, 0x2b, 0x06, 0x1b, 0x01, 0x16, 0x80, 0x19, 0x01, 0xe6, 0x18, 0x35, 0x31, 0x72, 0x71,
+	0xc8, 0xcf, 0x2b, 0x06, 0x1b, 0x01, 0x16, 0x80, 0x19, 0x01, 0xe6, 0x18, 0xb5, 0x30, 0x72, 0x71,
 	0x3b, 0x96, 0x96, 0x64, 0x04, 0xa7, 0x16, 0x95, 0x65, 0x26, 0xa7, 0x0a, 0x59, 0x70, 0xb1, 0xfa,
 	0xe4, 0xa7, 0x67, 0xe6, 0x09, 0x49, 0x42, 0x9c, 0xa5, 0x87, 0xe9, 0x18, 0x29, 0x11, 0xa8, 0x14,
-	0xaa, 0xf9, 0x96, 0x5c, 0x6c, 0xce, 0x45, 0xa9, 0x89, 0x25, 0xa9, 0x24, 0x6b, 0x4d, 0x62, 0x03,
-	0x0b, 0x1a, 0x03, 0x02, 0x00, 0x00, 0xff, 0xff, 0x20, 0xdc, 0xe8, 0xe3, 0x0f, 0x01, 0x00, 0x00,
+	0xaa, 0xf9, 0xd6, 0x5c, 0x1c, 0x41, 0xa9, 0xe9, 0x99, 0xc5, 0x25, 0xa9, 0x45, 0x24, 0x6b, 0x4e,
+	0x62, 0x03, 0x0b, 0x1a, 0x03, 0x02, 0x00, 0x00, 0xff, 0xff, 0x81, 0xe6, 0xa4, 0xb2, 0x11, 0x01,
+	0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -145,7 +146,7 @@ const _ = grpc.SupportPackageIsVersion4
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type AuthServiceClient interface {
 	Login(ctx context.Context, in *CredentialsMessage, opts ...grpc.CallOption) (*TokenResponse, error)
-	Create(ctx context.Context, in *CredentialsMessage, opts ...grpc.CallOption) (*TokenResponse, error)
+	Register(ctx context.Context, in *CredentialsMessage, opts ...grpc.CallOption) (*TokenResponse, error)
 }
 
 type authServiceClient struct {
@@ -165,9 +166,9 @@ func (c *authServiceClient) Login(ctx context.Context, in *CredentialsMessage, o
 	return out, nil
 }
 
-func (c *authServiceClient) Create(ctx context.Context, in *CredentialsMessage, opts ...grpc.CallOption) (*TokenResponse, error) {
+func (c *authServiceClient) Register(ctx context.Context, in *CredentialsMessage, opts ...grpc.CallOption) (*TokenResponse, error) {
 	out := new(TokenResponse)
-	err := c.cc.Invoke(ctx, "/proto.AuthService/Create", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.AuthService/Register", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -177,7 +178,7 @@ func (c *authServiceClient) Create(ctx context.Context, in *CredentialsMessage, 
 // AuthServiceServer is the server API for AuthService service.
 type AuthServiceServer interface {
 	Login(context.Context, *CredentialsMessage) (*TokenResponse, error)
-	Create(context.Context, *CredentialsMessage) (*TokenResponse, error)
+	Register(context.Context, *CredentialsMessage) (*TokenResponse, error)
 }
 
 // UnimplementedAuthServiceServer can be embedded to have forward compatible implementations.
@@ -187,8 +188,8 @@ type UnimplementedAuthServiceServer struct {
 func (*UnimplementedAuthServiceServer) Login(ctx context.Context, req *CredentialsMessage) (*TokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
 }
-func (*UnimplementedAuthServiceServer) Create(ctx context.Context, req *CredentialsMessage) (*TokenResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+func (*UnimplementedAuthServiceServer) Register(ctx context.Context, req *CredentialsMessage) (*TokenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
 }
 
 func RegisterAuthServiceServer(s *grpc.Server, srv AuthServiceServer) {
@@ -213,20 +214,20 @@ func _AuthService_Login_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AuthService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _AuthService_Register_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CredentialsMessage)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServiceServer).Create(ctx, in)
+		return srv.(AuthServiceServer).Register(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/proto.AuthService/Create",
+		FullMethod: "/proto.AuthService/Register",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).Create(ctx, req.(*CredentialsMessage))
+		return srv.(AuthServiceServer).Register(ctx, req.(*CredentialsMessage))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -240,8 +241,8 @@ var _AuthService_serviceDesc = grpc.ServiceDesc{
 			Handler:    _AuthService_Login_Handler,
 		},
 		{
-			MethodName: "Create",
-			Handler:    _AuthService_Create_Handler,
+			MethodName: "Register",
+			Handler:    _AuthService_Register_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -4,7 +4,7 @@ package proto;
 
 service AuthService {
     rpc Login (CredentialsMessage) returns (TokenResponse);
-    rpc Create (CredentialsMessage) returns (TokenResponse);
+    rpc Register (CredentialsMessage) returns (TokenResponse);
 }
 
 message CredentialsMessage {
